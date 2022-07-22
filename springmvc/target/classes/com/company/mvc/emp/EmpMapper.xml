@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mvc.emp.EmpMapper">
+	<select id="getEmp" resultType="EmpVO">
+		SELECT * 
+		FROM EMPLOYEES
+		WHERE EMPLOYEE_ID=#{employeeId}
+	</select>
+	<select id="getEmpList" resultType="com.company.mvc.emp.EmpVO">
+		SELECT *
+		FROM EMPLOYEES
+		ORDER BY EMPLOYEE_ID
+	</select>
+	<insert id="insert" parameterType="EmpVO">
+	
+		<selectKey keyProperty="employeeId" order="BEFORE" resultType="string">
+			select nvl(max(employee_id),0)+1 from employees
+		</selectKey>
+		INSERT INTO
+			EMPLOYEES (
+				EMPLOYEE_ID,
+				FIRST_NAME,
+				LAST_NAME,
+				HIRE_DATE,
+				EMAIL,
+				JOB_ID
+				)
+			VALUES (
+				#{employeeId},
+				#{firstName},
+				#{lastName},
+				#{hireDate},
+				#{email},
+				#{jobId}
+				)
+	
+	 <!-- 
+		  INSERT INTO EMPLOYEES
+   (
+      employee_id,
+      first_name,
+      last_name,
+      hire_date,
+      email,
+      job_id
+   )
+   VALUES(
+      employees_seq.nextval,
+      #{firstName},
+      #{lastName},
+      sysdate,
+      #{email},
+      #{jobId}
+   )
+    -->
+	</insert>
+	<select id="search" parameterType="EmpReqVO" resultType ="EmpVO">
+		SELECT * FROM EMPLOYEES
+		<where>
+			<if test="employeeId != null and employeeId != ''">
+				and employee_id = #{employeeId}
+			</if>
+			<if test="">
+				and department_id = #{dept}
+				<foreach collection=""></foreach>
+			</if>
+			<if test="jobId != null and jobId != ''">
+				and job_id = #{jobId}
+			</if>
+			<if test="sdt != null">
+				and hire_date >= #{sdt}
+			</if>
+			<if test="edt != null">
+				<![CDATA[   and hire_date <= #{edt} ]]>
+			</if>
+		</where>
+	</select>
+	
+	<update id="update" parameterType="com.company.mvc.emp.EmpVO">
+		UPDATE EMPLOYEES
+		SET first_name = #{firstName},
+			last_name = #{lastName},
+			hire_date = #{hireDate},
+			email = #{email},
+			job_id = #{jobId}
+		WHERE employee_id = #{employeeId}
+	</update>
+	
+	<delete id="delete" parameterType="com.company.mvc.emp.EmpVO">
+	<if test="employeeId != null">
+		DELETE FROM EMPLOYEES
+		WHERE employee_id = #{employeeId}
+	</if>
+	</delete>
+	
+	
+	
+
+</mapper>
