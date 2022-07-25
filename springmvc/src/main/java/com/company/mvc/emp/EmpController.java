@@ -70,7 +70,6 @@ public class EmpController {
 //	@PostMapping("/empUpdateProc")
 	@RequestMapping(value = "/empUpdateProc" , method = RequestMethod.POST)
 	public String empUpdateProc(EmpVO vo) {
-		SimpleDateFormat('yyyy-MM-dd');
 		
 		System.out.println(vo.toString());
 		mapper.update(vo);
